@@ -1,5 +1,5 @@
 # Kafka Broker Environment
-This repository has the code to run the example developed in this [article](google.com)
+This repository has the code to run the example developed in this [article](https://medium.com/@ronnansouza/setting-up-a-kafka-broker-using-docker-creating-a-producer-and-consumer-group-with-multiple-384b724cd324?sk=4f828cdc1adeec088e9e67f35dbb0c8f)
 
 ## Install
 `go get github.com/RonnanSouza/kafka_environment`
