@@ -25,11 +25,3 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
     restart: always
     container_name: kafka
-
-  producer:
-    build: .
-    command: go run main.go producer
-    depends_on:
-      - kafka
-    restart: always
-    container_name: producer
