@@ -11,8 +11,9 @@ import (
 func main() {
 
 	// Flags
-	consumerFlagValue := flag.Bool("c", false, "Use this flag to start a Kafka Consumer")
-	producerFlagValue := flag.Bool("p", false, "Use this flag to start a Kafka Producer")
+	consumerFlagValue := flag.Bool("c", false, "    Use this flag to start a Kafka Consumer")
+	producerFlagValue := flag.Bool("p", false, "    Use this flag to start a Kafka Producer")
+	stringFlagValue := flag.String("a", "", "    Use this flag with either \"consumer\" or \"producer\"")
 
 	// Flag Processing
 	flag.Parse()
@@ -22,7 +23,11 @@ func main() {
 		producer.StartProducer()
 	} else if *consumerFlagValue == true {
 		consumer.StartConsumer()
+	} else if *stringFlagValue == "consumer" {
+		consumer.StartConsumer()
+	} else if *stringFlagValue == "producer" {
+		producer.StartProducer()
 	} else {
-		fmt.Print("Usage: \n -c     Use this flag to start a Kafka Consumer\n -p     Use this flag to start a Kafka Producer\n")
+		fmt.Print("Usage: \n -c     Use this flag to start a Kafka Consumer\n -p     Use this flag to start a Kafka Producer\n -a     Use this flag with either \"consumer\" or \"producer\"\n")
 	}
 }
