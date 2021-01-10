@@ -1,19 +1,23 @@
 package producer
 
 import (
-	"github.com/Shopify/sarama"
+	"crypto/sha256"
+	"encoding/hex"
 	"log"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/Shopify/sarama"
 )
 
 var (
 	kafkaBrokers = []string{"localhost:9093"}
-	KafkaTopic = "sarama_topic"
-	enqueued int
+	KafkaTopic   = "sarama_topic"
+	enqueued     int
 )
 
+// StartProducer runs the AsyncProducer
 func StartProducer() {
 
 	producer, err := setupProducer()
@@ -33,7 +37,7 @@ func StartProducer() {
 }
 
 // setupProducer will create a AsyncProducer and returns it
-func setupProducer() (sarama.AsyncProducer, error){
+func setupProducer() (sarama.AsyncProducer, error) {
 	config := sarama.NewConfig()
 	sarama.Logger = log.New(os.Stderr, "[sarama_logger]", log.LstdFlags)
 	return sarama.NewAsyncProducer(kafkaBrokers, config)
@@ -44,7 +48,10 @@ func setupProducer() (sarama.AsyncProducer, error){
 func produceMessages(producer sarama.AsyncProducer, signals chan os.Signal) {
 	for {
 		time.Sleep(time.Second)
-		message := &sarama.ProducerMessage{Topic: KafkaTopic, Value: sarama.StringEncoder("testing 123")}
+		valueBytes := []byte(time.Now().Format("15:04:05.000"))
+		valueHash := sha256.Sum256(valueBytes)
+		valueString := hex.EncodeToString(valueHash[:])
+		message := &sarama.ProducerMessage{Topic: KafkaTopic, Value: sarama.StringEncoder(valueString)}
 		select {
 		case producer.Input() <- message:
 			enqueued++
